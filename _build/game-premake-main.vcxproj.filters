@@ -15,6 +15,9 @@
     <ClInclude Include="..\game\src\screens.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\game\src\main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\game\src\main.cpp">

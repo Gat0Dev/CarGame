@@ -1,4 +1,2 @@
-﻿  raylib_game.cpp
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\RayLibGame\game\src\raylib_game.cpp(75,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\RayLibGame\game\src\raylib_game.cpp(76,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  game-premake-main.vcxproj -> C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\RayLibGame\_bin\Debug\game-premake-main.exe
+﻿  main.cpp
+  game-premake-main.vcxproj -> C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\_bin\Debug\game-premake-main.exe
