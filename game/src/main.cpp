@@ -8,24 +8,24 @@ int main(void)
 {
     int WindowWidth = 960;
     int WindowHeigh = 540;
+    InitWindow(WindowWidth, WindowHeigh, "Car Game");
 
-    FlipBook FB_BackGround("resources/SpriteSheets/BackGround/testSheet.png", WindowWidth/2, WindowHeigh/2, 0.1f, WHITE);
+    FlipBook FB_BackGround("resources/SpriteSheets/BackGround/testSheet.png", 0, 0, 0.01f, WHITE);
     Rectangle BackGroundRec[2] = {
-    {0.0, 0.0, 1152, 648},
-    {0.0, 0.0, 1152, 648}
+    {0.0, 0.0, FB_BackGround.SpriteSheet.width, FB_BackGround.SpriteSheet.height},
+    {0.0, FB_BackGround.SpriteSheet.width/2, FB_BackGround.SpriteSheet.width, FB_BackGround.SpriteSheet.height}
     }; //Creacion de matriz que va ligada a la funcion "void PlayFlipBook" que asigna los puntos de la textura (Falta asignarlos)
     
     bool globalRunning = true;
     SetTargetFPS(165);
-    InitWindow(WindowWidth, WindowHeigh, "Car Game");
     while (globalRunning)
     {    
         
         BeginDrawing();
-        DrawFPS(850,20);
-
+        
         FB_BackGround.PlayFlipBook(BackGroundRec);
 
+        DrawFPS(850, 20);
         EndDrawing();
         ClearBackground(BLACK);
 
@@ -35,8 +35,6 @@ int main(void)
             CloseWindow();
         };
     };
-
-    FB_BackGround.PlayFlipBook(BackGroundRec);
 
     return 0;
 }; 

@@ -3,7 +3,6 @@
 class FlipBook
 {
 private:
-	Texture2D SpriteSheet; 
 	Vector2 Position;
 	Color SpritesColor;
 	int CurrentFrame;
@@ -11,6 +10,7 @@ private:
 	float FrameSpeed;
 public:
 	
+	Texture2D SpriteSheet; 
 	FlipBook(char* TextureUrl, int PosX, int PosY, float FrameSpeed_, Color SpritesColor_) {
 		
 		SpriteSheet = LoadTexture(TextureUrl);
