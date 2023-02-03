@@ -10,7 +10,7 @@ int main(void)
     int WindowHeigh = 540;
     InitWindow(WindowWidth, WindowHeigh, "Car Game");
 
-    FlipBook FB_BackGround("resources/SpriteSheets/BackGround/testSheet.png", 0, 0,WHITE);
+    FlipBook FB_BackGround("resources/SpriteSheets/BackGround/testSheet.png", 0, 0, 0.01f, WHITE);
     Rectangle BackGroundRec[2] = {
     {0.0, 0.0, FB_BackGround.SpriteSheet.width, FB_BackGround.SpriteSheet.height},
     {0.0, FB_BackGround.SpriteSheet.width/2, FB_BackGround.SpriteSheet.width, FB_BackGround.SpriteSheet.height}
@@ -23,7 +23,7 @@ int main(void)
         
         BeginDrawing();
         
-        FB_BackGround.PlayFlipBook(BackGroundRec, 0.1);
+        FB_BackGround.PlayFlipBook(BackGroundRec);
 
         DrawFPS(850, 20);
         EndDrawing();
@@ -37,4 +37,4 @@ int main(void)
     };
 
     return 0;
-};
+}; 

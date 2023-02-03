@@ -3,14 +3,15 @@
 class FlipBook
 {
 private:
-	float SecondTimer;
 	Vector2 Position;
 	Color SpritesColor;
 	int CurrentFrame;
+	float CurrentTime;
+	float FrameSpeed;
 public:
+	
 	Texture2D SpriteSheet; 
-
-	FlipBook(char* TextureUrl, int PosX, int PosY, Color SpritesColor_) {
+	FlipBook(char* TextureUrl, int PosX, int PosY, float FrameSpeed_, Color SpritesColor_) {
 		
 		SpriteSheet = LoadTexture(TextureUrl);
 
@@ -19,23 +20,25 @@ public:
 
 		SpritesColor = SpritesColor_;
 
+		FrameSpeed = FrameSpeed_;
 		CurrentFrame = 0;
-		SecondTimer = 0.0f;
+		CurrentTime = 0.0f;
 			
 	};
 	~FlipBook() {
 		UnloadTexture(SpriteSheet);
 	};
-	void PlayFlipBook(Rectangle* SpritesPos, float PlayRate) {	
-			SecondTimer += GetFrameTime();
-			DrawTextureRec(SpriteSheet, SpritesPos[CurrentFrame], Position, SpritesColor);
-			if (SecondTimer > PlayRate) {
+	void PlayFlipBook(Rectangle* SpritesPos) {
+			DrawTextureRec(SpriteSheet, SpritesPos[CurrentFrame], Position, SpritesColor);			
+			CurrentTime += FrameSpeed;
+			if (CurrentTime > 1) {
 				CurrentFrame++;
-				SecondTimer = 0.0f;
+				CurrentTime = 0.0f;
 		};
 			if (CurrentFrame > sizeof(*SpritesPos) / sizeof(SpritesPos[0])) {
 				CurrentFrame = 0;
 			};
+			
 	};
 	
 
