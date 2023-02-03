@@ -10,7 +10,7 @@ int main(void)
     int WindowHeigh = 540;
     InitWindow(WindowWidth, WindowHeigh, "Car Game");
 
-    FlipBook FB_BackGround("resources/SpriteSheets/BackGround/testSheet.png", 0, 0, 0.001f, WHITE);
+    FlipBook FB_BackGround("resources/SpriteSheets/BackGround/testSheet.png", 0, 0, WHITE);
     Rectangle BackGroundRec[2] = {
     {0.0, 0.0, FB_BackGround.SpriteSheet.width, FB_BackGround.SpriteSheet.height},
     {0.0, FB_BackGround.SpriteSheet.width/2, FB_BackGround.SpriteSheet.width, FB_BackGround.SpriteSheet.height}

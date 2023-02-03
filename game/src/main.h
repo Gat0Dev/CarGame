@@ -10,7 +10,7 @@ private:
 public:
 	Texture2D SpriteSheet; 
 
-	FlipBook(char* TextureUrl, int PosX, int PosY, float FrameSpeed_, Color SpritesColor_) {
+	FlipBook(char* TextureUrl, int PosX, int PosY, float, Color SpritesColor_) {
 		
 		SpriteSheet = LoadTexture(TextureUrl);
 
