@@ -4,11 +4,12 @@ class FlipBook
 {
 private:
 	float SecondTimer;
+	int CurrentFrame;
 	Vector2 Position;
 	Color SpritesColor;
-	int CurrentFrame;
 public:
-	Texture2D SpriteSheet; 
+	Texture2D SpriteSheet;
+	Rectangle* BackGroundRec;
 
 	FlipBook(char* TextureUrl, int PosX, int PosY, Color SpritesColor_) {
 		
@@ -26,16 +27,21 @@ public:
 	~FlipBook() {
 		UnloadTexture(SpriteSheet);
 	};
-	void PlayFlipBook(Rectangle* SpritesPos, float PlayRate) {	
+	void PlayFlipBook(Rectangle* SpritesFrame, Rectangle SpritePos, float PlayRate, float Rotation, short SpriteTotalFrames) {
 			SecondTimer += GetFrameTime();
-			DrawTextureRec(SpriteSheet, SpritesPos[CurrentFrame], Position, SpritesColor);
+			DrawTexturePro(SpriteSheet, SpritesFrame[CurrentFrame], SpritePos, Position, Rotation, SpritesColor);
 			if (SecondTimer > PlayRate) {
 				CurrentFrame++;
 				SecondTimer = 0.0f;
 		};
-			if (CurrentFrame > sizeof(*SpritesPos) / sizeof(SpritesPos[0])) {
+			if (CurrentFrame == SpriteTotalFrames) {
 				CurrentFrame = 0;
 			};
+			// v Display de FPS del FlipBook para debug. v
+			char DebugText[100];
+			sprintf(DebugText, "%d", CurrentFrame);
+			DrawText(DebugText, 0, 0, 20, RED);
+			// ^ Display de FPS del FlipBook para debug.^
 	};
 	
 
