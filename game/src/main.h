@@ -7,11 +7,13 @@ private:
 	int CurrentFrame;
 	Vector2 Position;
 	Color SpritesColor;
+	
 public:
 	Texture2D SpriteSheet;
-	Rectangle* BackGroundRec;
-
-	FlipBook(char* TextureUrl, int PosX, int PosY, Color SpritesColor_) {
+	const short TotalSprites;
+	Rectangle** SheetRec;
+	Rectangle FlipBookPosition;
+	FlipBook(char* TextureUrl, int PosX, int PosY, Color SpritesColor_, const short TotalSprites_) : TotalSprites(TotalSprites_) {
 		
 		SpriteSheet = LoadTexture(TextureUrl);
 
@@ -22,14 +24,20 @@ public:
 
 		CurrentFrame = 0;
 		SecondTimer = 0.0f;
+		SheetRec = new Rectangle * [TotalSprites];
+
+		for (int i = 0; i < TotalSprites; i++)
+		{
+			SheetRec[i] = new Rectangle;
+		}
 			
 	};
 	~FlipBook() {
 		UnloadTexture(SpriteSheet);
 	};
-	void PlayFlipBook(Rectangle* SpritesFrame, Rectangle SpritePos, float PlayRate, float Rotation, short SpriteTotalFrames) {
+	void PlayFlipBook(float PlayRate, float Rotation, short SpriteTotalFrames) {
 			SecondTimer += GetFrameTime();
-			DrawTexturePro(SpriteSheet, SpritesFrame[CurrentFrame], SpritePos, Position, Rotation, SpritesColor);
+			DrawTexturePro(SpriteSheet, *SheetRec[CurrentFrame], FlipBookPosition, Position, Rotation, SpritesColor);
 			if (SecondTimer > PlayRate) {
 				CurrentFrame++;
 				SecondTimer = 0.0f;

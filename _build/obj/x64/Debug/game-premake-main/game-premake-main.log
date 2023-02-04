@@ -1,9 +1,5 @@
 ﻿  main.cpp
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.h(17,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.h(18,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.cpp(62,45): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.cpp(62,45): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.cpp(62,58): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.cpp(62,58): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.cpp(72,105): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.h(20,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.h(21,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\game\src\main.cpp(70,83): warning C4305: 'argument': truncation from 'double' to 'float'
   game-premake-main.vcxproj -> C:\Users\david.DESKTOP-RBUILSM.000\Desktop\Repositorios\CarGame\_bin\Debug\game-premake-main.exe
