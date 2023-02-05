@@ -19,7 +19,7 @@ int main(void)
     // 
     //CARGA DE FLIPBOOKS:
     //Creacion de FlipBook para el background y Rectangles para posicionar Flipbook.
-    C_FlipBook FB_StartBackGround("resources/SpriteSheets/BackGround/StartBackgroundSheet.png", 0, 0, DARKBROWN, 42);
+    C_FlipBook FB_StartBackGround("resources/SpriteSheets/BackGround/StartBackgroundSheet.png", DARKBROWN, 42);
     //COMENTARIO AL PROFESOR: Lei de un archivo txt que puedo meter todas las coordenadas y luego leerlas en C++ para no hacer todo esto pero al ser pocos Sprites y tener el tiempo ajustado no lo he hecho.
     *FB_StartBackGround.SheetRec[0] = {600, 0, 600, 338};
     *FB_StartBackGround.SheetRec[1] = {1200, 0, 600, 338 };
@@ -63,31 +63,43 @@ int main(void)
     *FB_StartBackGround.SheetRec[39] = {2400, 2028, 600, 338 };
     *FB_StartBackGround.SheetRec[40] = {2400, 2366, 600, 338 };
     *FB_StartBackGround.SheetRec[41] = {0, 2704, 600, 338 };
-    FB_StartBackGround.FlipBookPosition = { 0.0, 0.0, (float)WindowWidth, (float)WindowHeigh};
+    FB_StartBackGround.Transform = { 0.0, 0.0, (float)WindowWidth, (float)WindowHeigh};
 
-    C_FlipBook FB_StartControls("resources/SpriteSheets/BackGround/controls.png", 0, 0, WHITE, 1);
+    C_FlipBook FB_StartControls("resources/SpriteSheets/BackGround/controls.png", WHITE, 1);
     *FB_StartControls.SheetRec[0] = {0, 0, (float)FB_StartControls.SpriteSheet.width,(float)FB_StartControls.SpriteSheet.height};
-    FB_StartControls.FlipBookPosition = {-100, 250, (float)WindowWidth - 450, (float)WindowHeigh - 220 };
+    FB_StartControls.Transform = {-100, 250, (float)WindowWidth - 450, (float)WindowHeigh - 220 };
 
-    C_FlipBook FB_StartPlayStart("resources/SpriteSheets/BackGround/playStartSheet.png", 0, 0, WHITE, 6);
+    C_FlipBook FB_StartPlayStart("resources/SpriteSheets/BackGround/playStartSheet.png", WHITE, 6);
     for (int i = 0; i < FB_StartPlayStart.TotalSprites; i++)
     {
         *FB_StartPlayStart.SheetRec[i] = { (600 * (float)i), 0, 600, 400 };
     };
-    FB_StartPlayStart.FlipBookPosition = { 190, 0, 600,300 };
+    FB_StartPlayStart.Transform = { 190, 0, 600,300 };
 
     //CARGA DE SONIDO:
     Sound StartThemeSound = LoadSound("resources/Sounds/Start/themeSong.wav");
 
     /////////////////////INGAME STATE///////////////////////
     //CARGA DE FLIPBOOKS:
-    C_FlipBook FB_InGameBackground("resources/SpriteSheets/RaceBackGround/raceSheet.png", 0, 0, WHITE, 4);
+    C_FlipBook FB_InGameBackground("resources/SpriteSheets/Race/raceSheet.png", WHITE, 4);
     for (int i = 0; i < FB_InGameBackground.TotalSprites; i++)
     {
         *FB_InGameBackground.SheetRec[i] = { (320 * (float)i), 0, 320, 200};
     };
-    FB_InGameBackground.FlipBookPosition = { 0, 0, (float)WindowWidth, (float)WindowHeigh };
-    
+    FB_InGameBackground.Transform = { 0, 0, (float)WindowWidth, (float)WindowHeigh };
+    //Trees:
+    //TO-DO: Buscar como crear un arreglo de varios arboles para no crearlos uno por uno.
+    //IDEAS: Crear funciones, usar bucles, usar arrays o matrices, crear un spawner general.
+    //C_FlipBook FB_InGameTree[3]("resources/SpriteSheets/Race/tree.png", WHITE, 1);
+    //for (int i = 0; i < 3; i++)
+    //{
+    //    
+    //    *FB_InGameTree.SheetRec[0] = { 0, 0, 32,23 };
+    //    FB_InGameTree.Transform = { 70,10,42,33 };
+    //};
+    C_FlipBook FB_InGameTree("resources/SpriteSheets/Race/tree.png", WHITE, 1);
+    *FB_InGameTree.SheetRec[0] = { 0, 0, 32,23 };
+    FB_InGameTree.Transform = { 70,10,42,33 };
     //Game Bucle:
     E_GamePlayState GamePlayState = Start;
     HideCursor();
@@ -104,22 +116,29 @@ int main(void)
             if (!IsSoundPlaying(StartThemeSound)) {
                 PlaySound(StartThemeSound);
             };
-                FB_StartBackGround.PlayFlipBook(0.04, 0.0, false);
-                FB_StartControls.PlayFlipBook(0, 0.0, false);
-                FB_StartPlayStart.PlayFlipBook(0.1, 0, false);
+                FB_StartBackGround.Play(0.04, 0.0, false);
+                FB_StartControls.Play(0, 0.0, false);
+                FB_StartPlayStart.Play(0.1, 0, false);
                 if (GetKeyPressed() || IsMouseButtonDown(MOUSE_BUTTON_LEFT) || IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
                     GamePlayState = InGame;
                     StopSound(StartThemeSound);
                 };
             break;
         case InGame:
-                FB_InGameBackground.PlayFlipBook(0.1, 0, true);
+                FB_InGameBackground.Play(0.1, 0, false);
+
+                FB_InGameTree.Play(0, 0, false);
+                FB_InGameTree.Play(0, 0, false);
+                FB_InGameTree.MoveTo(0, 40, 0.12);
+                FB_InGameTree.ClampPos(0, 500, 70, 10, 70, 0);
+
+
             break;
         case Dead:
             break;
         };
      
-        DrawFPS(850, 20);
+        /*DrawFPS(850, 20);*/
         EndDrawing();
         ClearBackground(BLACK);
 
