@@ -1,20 +1,27 @@
 #include "raylib.h"
 #include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 #include <iostream>
-#include <main.h>
 #include <string.h>
+
+#include <main.h>
+
+bool globalRunning = true; //Variable tratada como global para acceder al cierre desde cualquier parte del programa.
 
 int main(void)
 {
-    //Inicializacion de ventana (OpenGL).
+    //Inicializacion de ventana (Y OpenGL).
     int WindowWidth = 960;
     int WindowHeigh = 540;
     InitWindow(WindowWidth, WindowHeigh, "Car Game");
+    InitAudioDevice();
 
+    /////////////////////START STATE///////////////////////
+    // 
+    //CARGA DE FLIPBOOKS:
     //Creacion de FlipBook para el background y Rectangles para posicionar Flipbook.
-    FlipBook FB_StartBackGround("resources/SpriteSheets/BackGround/StartBackgroundSheet.png", 0, 0, WHITE, 42);
-    //Rapido y mal, ya me creare si lo veo necesario un sistema que analice un archivo de texto con estos datos.
-    *FB_StartBackGround.SheetRec[0] = {600, 0, 600, 338 };
+    C_FlipBook FB_StartBackGround("resources/SpriteSheets/BackGround/StartBackgroundSheet.png", 0, 0, DARKBROWN, 42);
+    //COMENTARIO AL PROFESOR: Lei de un archivo txt que puedo meter todas las coordenadas y luego leerlas en C++ para no hacer todo esto pero al ser pocos Sprites y tener el tiempo ajustado no lo he hecho.
+    *FB_StartBackGround.SheetRec[0] = {600, 0, 600, 338};
     *FB_StartBackGround.SheetRec[1] = {1200, 0, 600, 338 };
     *FB_StartBackGround.SheetRec[2] = {1800, 0, 600, 338 };
     *FB_StartBackGround.SheetRec[3] = {0, 338, 600, 338 };
@@ -57,22 +64,66 @@ int main(void)
     *FB_StartBackGround.SheetRec[40] = {2400, 2366, 600, 338 };
     *FB_StartBackGround.SheetRec[41] = {0, 2704, 600, 338 };
     FB_StartBackGround.FlipBookPosition = { 0.0, 0.0, (float)WindowWidth, (float)WindowHeigh};
+
+    C_FlipBook FB_StartControls("resources/SpriteSheets/BackGround/controls.png", 0, 0, WHITE, 1);
+    *FB_StartControls.SheetRec[0] = {0, 0, (float)FB_StartControls.SpriteSheet.width,(float)FB_StartControls.SpriteSheet.height};
+    FB_StartControls.FlipBookPosition = {-100, 250, (float)WindowWidth - 450, (float)WindowHeigh - 220 };
+
+    C_FlipBook FB_StartPlayStart("resources/SpriteSheets/BackGround/playStartSheet.png", 0, 0, WHITE, 6);
+    for (int i = 0; i < FB_StartPlayStart.TotalSprites; i++)
+    {
+        *FB_StartPlayStart.SheetRec[i] = { (600 * (float)i), 0, 600, 400 };
+    };
+    FB_StartPlayStart.FlipBookPosition = { 190, 0, 600,300 };
+
+    //CARGA DE SONIDO:
+    Sound StartThemeSound = LoadSound("resources/Sounds/Start/themeSong.wav");
+
+    /////////////////////INGAME STATE///////////////////////
+    //CARGA DE FLIPBOOKS:
+    C_FlipBook FB_InGameBackground("resources/SpriteSheets/RaceBackGround/raceSheet.png", 0, 0, WHITE, 4);
+    for (int i = 0; i < FB_InGameBackground.TotalSprites; i++)
+    {
+        *FB_InGameBackground.SheetRec[i] = { (320 * (float)i), 0, 320, 200};
+    };
+    FB_InGameBackground.FlipBookPosition = { 0, 0, (float)WindowWidth, (float)WindowHeigh };
     
     //Game Bucle:
-    bool globalRunning = true;
+    E_GamePlayState GamePlayState = Start;
+    HideCursor();
     SetTargetFPS(165);
+
     while (globalRunning)
     {    
         
         BeginDrawing();
-        
-        FB_StartBackGround.PlayFlipBook(0.05, 0.0, FB_StartBackGround.TotalSprites);     
 
+        switch (GamePlayState)
+        {
+        case Start:
+            if (!IsSoundPlaying(StartThemeSound)) {
+                PlaySound(StartThemeSound);
+            };
+                FB_StartBackGround.PlayFlipBook(0.04, 0.0, false);
+                FB_StartControls.PlayFlipBook(0, 0.0, false);
+                FB_StartPlayStart.PlayFlipBook(0.1, 0, false);
+                if (GetKeyPressed() || IsMouseButtonDown(MOUSE_BUTTON_LEFT) || IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+                    GamePlayState = InGame;
+                    StopSound(StartThemeSound);
+                };
+            break;
+        case InGame:
+                FB_InGameBackground.PlayFlipBook(0.1, 0, true);
+            break;
+        case Dead:
+            break;
+        };
+     
         DrawFPS(850, 20);
         EndDrawing();
         ClearBackground(BLACK);
 
-        //Verificar si se debe cerrar la ventana al pulsar ESC o la X.
+        //Esto verifica si se debe cerrar la ventana al pulsar ESC o la X.
         if (WindowShouldClose()) {
             globalRunning = false;
             CloseWindow();

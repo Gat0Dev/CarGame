@@ -1,6 +1,6 @@
 #pragma once
 
-class FlipBook
+class C_FlipBook
 {
 private:
 	float SecondTimer;
@@ -11,46 +11,62 @@ private:
 public:
 	Texture2D SpriteSheet;
 	const short TotalSprites;
-	Rectangle** SheetRec;
+	Rectangle** SheetRec; //Puntero que almacena puntero el cual almacena punteros que almacenan las instancias de Rectangle.
 	Rectangle FlipBookPosition;
-	FlipBook(char* TextureUrl, int PosX, int PosY, Color SpritesColor_, const short TotalSprites_) : TotalSprites(TotalSprites_) {
+	C_FlipBook(char* TextureUrl, int PosX, int PosY, Color SpritesColor_, const short TotalSprites_) : TotalSprites(TotalSprites_) {
 		
 		SpriteSheet = LoadTexture(TextureUrl);
 
 		Position.x = PosX;
 		Position.y = PosY;
 
-		SpritesColor = SpritesColor_;
-
 		CurrentFrame = 0;
 		SecondTimer = 0.0f;
-		SheetRec = new Rectangle * [TotalSprites];
 
-		for (int i = 0; i < TotalSprites; i++)
+		SpritesColor = SpritesColor_;
+
+		SheetRec = new Rectangle * [TotalSprites]; //Creacion de punteros de tipo Rectangle.
+		for (int i = 0; i != TotalSprites; i++)
 		{
-			SheetRec[i] = new Rectangle;
-		}
+			SheetRec[i] = new Rectangle; //Asignacion de instancias Rectangle a los punteros.
+		};
 			
 	};
-	~FlipBook() {
+	~C_FlipBook() {
 		UnloadTexture(SpriteSheet);
+
+		
+		for (int i = 0; i != TotalSprites; i++) //Eliminacion de memoria tanto los punteros de las instancias y del puntero principal.
+		{
+			delete SheetRec[i];
+		};
+		delete SheetRec; 
 	};
-	void PlayFlipBook(float PlayRate, float Rotation, short SpriteTotalFrames) {
+	void PlayFlipBook(float PlayRate, float Rotation, bool Debug) {
 			SecondTimer += GetFrameTime();
 			DrawTexturePro(SpriteSheet, *SheetRec[CurrentFrame], FlipBookPosition, Position, Rotation, SpritesColor);
 			if (SecondTimer > PlayRate) {
 				CurrentFrame++;
 				SecondTimer = 0.0f;
 		};
-			if (CurrentFrame == SpriteTotalFrames) {
+			if (CurrentFrame == TotalSprites) {
 				CurrentFrame = 0;
 			};
 			// v Display de FPS del FlipBook para debug. v
-			char DebugText[100];
-			sprintf(DebugText, "%d", CurrentFrame);
-			DrawText(DebugText, 0, 0, 20, RED);
+			if (Debug) {
+				char DebugText[100];
+				sprintf(DebugText, "%d", CurrentFrame);
+				DrawText(DebugText, 0, 0, 20, RED);
+			};
 			// ^ Display de FPS del FlipBook para debug.^
-	};
+	};		
 	
 
+};
+
+enum E_GamePlayState
+{
+	Start,
+	InGame,
+	Dead
 };
