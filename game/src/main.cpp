@@ -87,21 +87,68 @@ int main(void)
         *FB_InGameBackground.SheetRec[i] = { (320 * (float)i), 0, 320, 200};
     };
     FB_InGameBackground.Transform = { 0, 0, (float)WindowWidth, (float)WindowHeigh };
+
     //Trees:
-    //TO-DO: Buscar como crear un arreglo de varios arboles para no crearlos uno por uno.
-    //IDEAS: Crear funciones, usar bucles, usar arrays o matrices, crear un spawner general.
-    //C_FlipBook FB_InGameTree[3]("resources/SpriteSheets/Race/tree.png", WHITE, 1);
-    //for (int i = 0; i < 3; i++)
-    //{
-    //    
-    //    *FB_InGameTree.SheetRec[0] = { 0, 0, 32,23 };
-    //    FB_InGameTree.Transform = { 70,10,42,33 };
-    //};
-    C_FlipBook FB_InGameTree("resources/SpriteSheets/Race/tree.png", WHITE, 1);
-    *FB_InGameTree.SheetRec[0] = { 0, 0, 32,23 };
-    FB_InGameTree.Transform = { 70,10,42,33 };
+    const short TotalLTrees = 5;
+    short LeftTreesStartPos = 70;
+    C_FlipBook* LTrees = new C_FlipBook[TotalLTrees]{
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    };
+    for (int i = 0; i < TotalLTrees; i++)
+    {
+        LTrees[i].SheetRec[0]->x = 0;
+        LTrees[i].SheetRec[0]->y = 0;
+        LTrees[i].SheetRec[0]->width = 32;
+        LTrees[i].SheetRec[0]->height = 23;
+        LTrees[i].Transform.x = LeftTreesStartPos + GetRandomValue(70 * -1, 70);
+        LTrees[i].Transform.y = GetRandomValue(0 * -1, 500);
+        LTrees[i].Transform.width = 42;
+        LTrees[i].Transform.height = 33;
+    };
+
+    const short TotalRTrees = 5;
+    short RightTreesStartPos = 660;
+    C_FlipBook* RTrees = new C_FlipBook[TotalRTrees]{
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    C_FlipBook("resources/SpriteSheets/Race/tree.png", WHITE, 1),
+    };
+    for (int i = 0; i < TotalRTrees; i++)
+    {
+        RTrees[i].SheetRec[0]->x = 0;
+        RTrees[i].SheetRec[0]->y = 0;
+        RTrees[i].SheetRec[0]->width = 32;
+        RTrees[i].SheetRec[0]->height = 23;
+        RTrees[i].Transform.x = RightTreesStartPos + GetRandomValue(70 * -1, 70);
+        RTrees[i].Transform.y = GetRandomValue(0 * -1, 500);
+        RTrees[i].Transform.width = 42;
+        RTrees[i].Transform.height = 33;
+    };
+
+    //Player Vehicle:
+    C_Vehicle RedCar("resources/SpriteSheets/Race/redCar.png",1);
+    RedCar.Vehicle.SheetRec[0]->x = 0;
+    RedCar.Vehicle.SheetRec[0]->y = 0;
+    RedCar.Vehicle.SheetRec[0]->width = 28;
+    RedCar.Vehicle.SheetRec[0]->height = 54;
+
+    RedCar.Vehicle.Transform.x = WindowWidth/2 - 113;
+    RedCar.Vehicle.Transform.y = 390;
+    RedCar.Vehicle.Transform.width = 42;
+    RedCar.Vehicle.Transform.height = 81;
+
+    //Static Enemy Vehicle:
+    //TO-DO: Averiguar como spawnear de manera dinamica coches enemigos y que sean eliminados al llegar al final. Luego de ello tener una probabilidad de spawn y desviacion en el eje X de la carretera. Todo esto trabajarlo en sus respectivas clases como la del vehiculo enemigo.
+    C_Enemy_Vehicle YellowTruck("resources/SpriteSheets/Race/yellowTruck.png",1);
+
     //Game Bucle:
-    E_GamePlayState GamePlayState = Start;
+    E_GamePlayState GamePlayState = InGame;
     HideCursor();
     SetTargetFPS(165);
 
@@ -125,15 +172,39 @@ int main(void)
                 };
             break;
         case InGame:
+           
                 FB_InGameBackground.Play(0.1, 0, false);
 
-                FB_InGameTree.Play(0, 0, false);
-                FB_InGameTree.Play(0, 0, false);
-                FB_InGameTree.MoveTo(0, 40, 0.12);
-                FB_InGameTree.ClampPos(0, 500, 70, 10, 70, 0);
+            for (int i = 0; i < TotalLTrees; i++)
+            {
+                LTrees[i].Play(0, 0, false);
+                LTrees[i].MoveTo(0, 40, 0.12);
+                LTrees[i].ClampPos(0, 500, 70, 10, 70, 0);
+            }
 
+            for (int i = 0; i < TotalRTrees; i++)
+            {
+                RTrees[i].Play(0, 0, false);
+                RTrees[i].MoveTo(0, 40, 0.12);
+                RTrees[i].ClampPos(0, 500, RightTreesStartPos, 10, 70, 0);
+            }
+            RedCar.Vehicle.Play(0, 0, true);
 
-            break;
+            //Car Movement:
+            
+            if (IsKeyDown(KEY_W)) {
+                RedCar.Vehicle.MoveTo(0, -3, 0.01);
+            }
+            else if (IsKeyDown(KEY_S)) {
+                RedCar.Vehicle.MoveTo(0, 3, 0.01);
+            }
+            else if (IsKeyDown(KEY_A)) {
+                RedCar.Vehicle.MoveTo(-3, 0, 0.01);
+            }
+            else if (IsKeyDown(KEY_D)) {
+                RedCar.Vehicle.MoveTo(3, 0, 0.01);
+            }
+            RedCar.RestrainToRoads();
         case Dead:
             break;
         };

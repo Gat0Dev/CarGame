@@ -70,9 +70,9 @@ public:
 			Transform.x += AddX;
 			Transform.y += AddY;
 
-		MoveSecTimer = 0;
-		};
-	};
+			MoveSecTimer = 0;
+		}		
+	}
 
 	void ClampPos(float MaxX, float MaxY, float MoveToX, float MoveToY, int XDesviation, int YDesviation) {
 		if (MaxX != 0 && Transform.x > MaxX) {
@@ -89,6 +89,34 @@ public:
 		};	
 	};
 
+};
+
+class C_Vehicle {
+private:
+	char* VehicleFlipBook;
+	int FlipBookFrames;
+public:
+	C_FlipBook Vehicle = { C_FlipBook(VehicleFlipBook, WHITE, 1) };
+	C_Vehicle(char* VehicleFlipBook_, int FlipBookFrames_) : VehicleFlipBook(VehicleFlipBook_) { //Uso de inicializacion de variables miembro antes del cuerpo del constructor para poder usarlas en la clase C_FlipBook.
+		FlipBookFrames = FlipBookFrames_;
+	};
+
+	void RestrainToRoads() {
+	if (Vehicle.Transform.x > 540) { Vehicle.Transform.x = 540; }
+	if (Vehicle.Transform.x < 192) { Vehicle.Transform.x = 192; }
+	if (Vehicle.Transform.y < 10) { Vehicle.Transform.y = 10; }
+	if (Vehicle.Transform.y > 440) { Vehicle.Transform.y = 440; }
+	}
+};
+
+class C_Enemy_Vehicle : public C_Vehicle {
+private:
+	char* VehicleFlipBook;
+	int FlipBookFrames;
+public:
+	C_Enemy_Vehicle(char* VehicleFlipBook_, int FlipBookFrames_) : C_Vehicle(VehicleFlipBook_, FlipBookFrames_) {
+	
+	}
 };
 
 enum E_GamePlayState
