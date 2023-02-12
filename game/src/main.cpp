@@ -2,6 +2,7 @@
 #include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 #include <iostream>
 #include <string.h>
+#include <cstdlib>
 
 #include <main.h>
 
@@ -9,6 +10,8 @@ bool globalRunning = true; //Variable tratada como global para acceder al cierre
 
 int main(void)
 {
+
+	srand(time(NULL));
 	//Inicializacion de ventana (Y OpenGL).
 	int WindowWidth = 960;
 	int WindowHeigh = 540;
@@ -134,11 +137,8 @@ int main(void)
 	};
 
 	//Player Vehicle:
-	C_Vehicle RedCar("resources/SpriteSheets/Race/redCar.png", 1);
-	RedCar.Vehicle.SheetRec[0]->x = 0;
-	RedCar.Vehicle.SheetRec[0]->y = 0;
-	RedCar.Vehicle.SheetRec[0]->width = 28;
-	RedCar.Vehicle.SheetRec[0]->height = 54;
+	C_Vehicle RedCar("resources/SpriteSheets/Race/redCarSheet.png", 1);
+	*RedCar.Vehicle.SheetRec[0] = { 5,5,28,54 };
 
 	RedCar.Vehicle.Transform.x = WindowWidth / 2 - 113;
 	RedCar.Vehicle.Transform.y = 390;
@@ -146,13 +146,31 @@ int main(void)
 	RedCar.Vehicle.Transform.height = 81;
 
 	//Static Enemy Vehicle:
-	//TO-DO: Crear un sistema de probabilidades de Spawn y crear colisiones.
-	C_Enemy_Vehicle YellowCars("resources/SpriteSheets/Race/yellowCar.png", 1, 10);
-	YellowCars.Spawn(200, 30);
-	YellowCars.Spawn(400, 300);
+	C_Enemy_Vehicle EnemyCars("resources/SpriteSheets/Race/yellowCar.png", 1, 10);
+
+	//USER INTERFACE:
+	//Health:
+	C_FlipBook Health("resources/SpriteSheets/Race/health.png", WHITE, 1);
+	*Health.SheetRec[0] = { 161,5,42,18 };
+	Health.Transform.x = 798;
+	Health.Transform.y = 190;
+	Health.Transform.width = 126;
+	Health.Transform.height = 54;
+
+	//Progress Bar:
+	C_FlipBook ProgressBar("resources/SpriteSheets/Race/progressBar.png", WHITE, 1);
+	*ProgressBar.SheetRec[0] = { 5,5,59,18 };
+	ProgressBar.Transform.x = 774;
+	ProgressBar.Transform.y = 114;
+	ProgressBar.Transform.width = 177;
+	ProgressBar.Transform.height = 54 ;
+	ProgressSystem PS;
+	
+
 
 	//Game Bucle:
-	E_GamePlayState GamePlayState = InGame;
+	bool RestartVariables = false;
+	E_GamePlayState GamePlayState = Start;
 	HideCursor();
 	SetTargetFPS(165);
 
@@ -174,6 +192,31 @@ int main(void)
 				GamePlayState = InGame;
 				StopSound(StartThemeSound);
 			};
+			//Gestion de reinicio del juego.
+			if (RestartVariables) {
+				RestartVariables = false;
+				PS.Timer = 0;
+				PS.Score = 0;
+				RedCar.HP = 3;
+				*Health.SheetRec[0] = { 161,5,42,18 };
+				RedCar.Vehicle.Transform.x = WindowWidth / 2 - 113;
+				RedCar.Vehicle.Transform.y = 390;
+				RedCar.HPLock = false;
+				RedCar.CanAnimDead = false;
+				RedCar.AnimTimer = 0.0f;
+				for (int i = 0; i < EnemyCars.TotalEnemysStatic - 1; i++)
+				{
+					delete EnemyCars.StaticVehicles[i];
+					
+				}
+				for (int i = 0; i < EnemyCars.TotalEnemysMovable - 1; i++)
+				{
+					delete EnemyCars.MovableVehicles[i];
+					
+				}
+				EnemyCars.TotalEnemysStatic = 0;
+				EnemyCars.TotalEnemysMovable = 0;
+			}
 			break;
 		case InGame:
 
@@ -197,29 +240,74 @@ int main(void)
 			//Car Movement:
 
 			if (IsKeyDown(KEY_W)) {
-				RedCar.Vehicle.MoveTo(0, -3, 0.01);
+				RedCar.Vehicle.MoveTo(0, -4, 0.01);
 			}
 			else if (IsKeyDown(KEY_S)) {
-				RedCar.Vehicle.MoveTo(0, 3, 0.01);
+				RedCar.Vehicle.MoveTo(0, 4, 0.01);
 			}
 			else if (IsKeyDown(KEY_A)) {
-				RedCar.Vehicle.MoveTo(-3, 0, 0.01);
+				RedCar.Vehicle.MoveTo(-4, 0, 0.01);
 			}
 			else if (IsKeyDown(KEY_D)) {
-				RedCar.Vehicle.MoveTo(3, 0, 0.01);
+				RedCar.Vehicle.MoveTo(4, 0, 0.01);
 			}
 			RedCar.RestrainToRoads();
 
-			for (int i = YellowCars.TotalEnemys-1; i >= 0; i--) {
+			for (int i = EnemyCars.TotalEnemysStatic-1; i >= 0; i--) {
 
-				YellowCars.Vehicles[i]->Play(0, 0, false);
-				YellowCars.Vehicles[i]->MoveTo(0, 2, 0.01);
-				YellowCars.DeleteAtPos(0, 560, i);
+				EnemyCars.StaticVehicles[i]->Play(0, 0, false);
+				EnemyCars.StaticVehicles[i]->MoveTo(0, 3, 0.01);
+				EnemyCars.DeleteAtPos(0, 560, i, false);
+				RedCar.CheckCollisions(EnemyCars.StaticVehicles[i]->Transform, Health);
 			}
+
+			for (int i = EnemyCars.TotalEnemysMovable - 1; i >= 0; i--) {
+
+				EnemyCars.MovableVehicles[i]->Play(0, 0, false);
+				EnemyCars.MovableVehicles[i]->MoveTo(EnemyCars.LeftRightAnim(EnemyCars.MovableVehicles[i]->Transform.x), 3, 0.01);
+				EnemyCars.DeleteAtPos(0, 560, i, true);
+				RedCar.CheckCollisions(EnemyCars.MovableVehicles[i]->Transform, Health);
+			}
+			EnemyCars.Spawn(GetRandomValue(200, 545), -100, 1, 2);
+			RedCar.DeadAnimationManager();
+
+			ProgressBar.Play(0, 0, false);
+			PS.UpdateProgressBar(ProgressBar);
+			PS.UpdateScore();
+			if (PS.GameCompleted) {
+				GamePlayState = Win;
+			}
+
+			Health.Play(0, 0, false);
+
+			if (RedCar.HP == 0) {
+				GamePlayState = Dead;
+			}
+			break;
+
+		case Win:
+			DrawText("YOU WIN!", WindowWidth / 2 - 144, WindowHeigh / 2 - 150, 60, GREEN);
+			DrawText("Score:", WindowWidth / 2 - 250, WindowHeigh / 2, 50, WHITE);
+			DrawText(PS.ScoreCh, WindowWidth / 2 - 58, WindowHeigh / 2 + 2, 50, WHITE);
+			DrawText("Press Space To Restart", WindowWidth / 2 - 250, WindowHeigh / 2 + 200, 40, WHITE);
+			if (IsKeyPressed(KEY_SPACE)) {
+				GamePlayState = Start;
+			}
+			RestartVariables = true;
+			break;
+
 		case Dead:
+			DrawText("YOU ARE DEAD!", WindowWidth / 2-220, WindowHeigh / 2-150, 60, RED);
+			DrawText("Score:", WindowWidth / 2 - 250, WindowHeigh / 2,50, WHITE);
+			DrawText(PS.ScoreCh, WindowWidth / 2-58, WindowHeigh / 2+2, 50, WHITE);
+			DrawText("Press Space To Restart", WindowWidth / 2-250, WindowHeigh / 2+200,40, WHITE);
+			if (IsKeyPressed(KEY_SPACE)) {
+				GamePlayState = Start;
+			}
+			RestartVariables = true;
 			break;
 		};
-
+		DrawText("By: iDavidXx", 800, 500, 20, WHITE);
 		/*DrawFPS(850, 20);*/
 		EndDrawing();
 		ClearBackground(BLACK);
