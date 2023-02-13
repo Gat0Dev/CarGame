@@ -2,7 +2,6 @@
 #include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 #include <iostream>
 #include <string.h>
-#include <cstdlib>
 
 #include <main.h>
 
@@ -10,8 +9,6 @@ bool globalRunning = true; //Variable tratada como global para acceder al cierre
 
 int main(void)
 {
-
-	srand(time(NULL));
 	//Inicializacion de ventana (Y OpenGL).
 	int WindowWidth = 960;
 	int WindowHeigh = 540;
@@ -19,7 +16,7 @@ int main(void)
 	InitAudioDevice();
 
 	/////////////////////START STATE///////////////////////
-	// 
+	 
 	//CARGA DE FLIPBOOKS:
 	//Creacion de FlipBook para el background y Rectangles para posicionar Flipbook.
 	C_FlipBook FB_StartBackGround("resources/SpriteSheets/BackGround/StartBackgroundSheet.png", DARKBROWN, 42);
@@ -66,8 +63,9 @@ int main(void)
 	*FB_StartBackGround.SheetRec[39] = { 2400, 2028, 600, 338 };
 	*FB_StartBackGround.SheetRec[40] = { 2400, 2366, 600, 338 };
 	*FB_StartBackGround.SheetRec[41] = { 0, 2704, 600, 338 };
-	FB_StartBackGround.Transform = { 0.0, 0.0, (float)WindowWidth, (float)WindowHeigh };
+	FB_StartBackGround.Transform = { 0.0, 0.0, (float)WindowWidth, (float)WindowHeigh }; //Posicionamiento del Flipbook.
 
+	//Creacion de FlipBook para controles.
 	C_FlipBook FB_StartControls("resources/SpriteSheets/BackGround/controls.png", WHITE, 1);
 	*FB_StartControls.SheetRec[0] = { 0, 0, (float)FB_StartControls.SpriteSheet.width,(float)FB_StartControls.SpriteSheet.height };
 	FB_StartControls.Transform = { -100, 250, (float)WindowWidth - 450, (float)WindowHeigh - 220 };
@@ -83,6 +81,7 @@ int main(void)
 	Sound StartThemeSound = LoadSound("resources/Sounds/Start/themeSong.wav");
 
 	/////////////////////INGAME STATE///////////////////////
+	
 	//CARGA DE FLIPBOOKS:
 	C_FlipBook FB_InGameBackground("resources/SpriteSheets/Race/raceSheet.png", WHITE, 4);
 	for (int i = 0; i < FB_InGameBackground.TotalSprites; i++)
@@ -195,6 +194,7 @@ int main(void)
 			//Gestion de reinicio del juego.
 			if (RestartVariables) {
 				RestartVariables = false;
+				PS.GameCompleted = false;
 				PS.Timer = 0;
 				PS.Score = 0;
 				RedCar.HP = 3;
@@ -218,6 +218,8 @@ int main(void)
 				EnemyCars.TotalEnemysMovable = 0;
 			}
 			break;
+
+			//EJECUCION ESTADO InGAME:
 		case InGame:
 
 			FB_InGameBackground.Play(0.1, 0, false);
@@ -285,26 +287,28 @@ int main(void)
 			}
 			break;
 
+			//EJECUCION ESTADO Win:
 		case Win:
 			DrawText("YOU WIN!", WindowWidth / 2 - 144, WindowHeigh / 2 - 150, 60, GREEN);
 			DrawText("Score:", WindowWidth / 2 - 250, WindowHeigh / 2, 50, WHITE);
 			DrawText(PS.ScoreCh, WindowWidth / 2 - 58, WindowHeigh / 2 + 2, 50, WHITE);
 			DrawText("Press Space To Restart", WindowWidth / 2 - 250, WindowHeigh / 2 + 200, 40, WHITE);
 			if (IsKeyPressed(KEY_SPACE)) {
+				RestartVariables = true;
 				GamePlayState = Start;
 			}
-			RestartVariables = true;
 			break;
 
+			//EJECUCION ESTADO Dead:
 		case Dead:
 			DrawText("YOU ARE DEAD!", WindowWidth / 2-220, WindowHeigh / 2-150, 60, RED);
 			DrawText("Score:", WindowWidth / 2 - 250, WindowHeigh / 2,50, WHITE);
 			DrawText(PS.ScoreCh, WindowWidth / 2-58, WindowHeigh / 2+2, 50, WHITE);
 			DrawText("Press Space To Restart", WindowWidth / 2-250, WindowHeigh / 2+200,40, WHITE);
 			if (IsKeyPressed(KEY_SPACE)) {
+				RestartVariables = true;
 				GamePlayState = Start;
 			}
-			RestartVariables = true;
 			break;
 		};
 		DrawText("By: iDavidXx", 800, 500, 20, WHITE);

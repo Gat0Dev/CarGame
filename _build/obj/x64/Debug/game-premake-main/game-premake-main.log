@@ -1,23 +1,22 @@
 ﻿  main.cpp
-D:\C++\Repositorios\CarGame\game\src\main.h(147,59): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(14,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(112,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(113,41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(133,46): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(134,41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(143,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(188,44): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(190,40): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.h(146,59): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(111,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(112,41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(132,46): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(133,41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(142,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(187,44): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(189,40): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\C++\Repositorios\CarGame\game\src\main.cpp(202,50): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(223,42): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(228,33): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(235,33): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(243,38): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(246,37): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(249,38): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(252,37): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(259,51): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(267,105): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\C++\Repositorios\CarGame\game\src\main.cpp(267,117): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\C++\Repositorios\CarGame\game\src\main.cpp(267,65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(225,42): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(230,33): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(237,33): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(245,38): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(248,37): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(251,38): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(254,37): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(261,51): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(269,105): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\C++\Repositorios\CarGame\game\src\main.cpp(269,117): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\C++\Repositorios\CarGame\game\src\main.cpp(269,65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   game-premake-main.vcxproj -> D:\C++\Repositorios\CarGame\_bin\Debug\game-premake-main.exe

@@ -91,7 +91,6 @@ public:
 
 };
 
-
 class C_Enemy_Vehicle {
 private:
 	float StaticSpawnTimer;
